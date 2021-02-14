@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jigmini.throwmoneyaround.dao.ThrowMoneyAroundDAO">
+
+    <select id="selectThrowId" resultType="java.lang.String">
+        SELECT SQ_THROW_ID.NEXTVAL FROM DUAL
+    </select>
+
+    <select id="selectThrowGetMoneyInfo" resultType="com.jigmini.common.util.CamelHashMap">
+        <![CDATA[
+        SELECT CU.USER_ID,
+               TM.THROW_ID,
+               GM.GET_SEQ,
+               GM.GET_AMT
+          FROM TB_THROW_MONEY TM,
+               TB_CHATROOM_USER CU,
+               TB_GET_MONEY GM
+         WHERE TM.ROOM_ID = CU.ROOM_ID
+           AND TM.THROW_ID = GM.THROW_ID
+           AND CU.ROOM_ID = #{roomId}
+           AND CU.USER_ID = #{userId}
+           AND TM.THROW_USER_ID != #{userId}
+           AND TM.REMAIN_AMT > 0
+           AND TM.THROW_TOKEN = #{throwToken}
+           AND TM.CNCL_YN = 'N'
+           AND TM.REGI_DT >= SYSDATE - 1/(24*6)
+           AND NOT EXISTS (SELECT 1
+                             FROM TB_GET_MONEY
+                            WHERE THROW_ID = TM.THROW_ID
+                              AND GET_USER_ID = #{userId})
+           AND ROWNUM = 1
+        ]]>
+    </select>
+
+    <select id="selectThrowMoneyInfo" resultType="com.jigmini.common.util.CamelHashMap">
+        <![CDATA[
+        SELECT THROW_ID,
+               THROW_AMT,
+               THROW_AMT - REMAIN_AMT AS GET_FNSH_AMT,
+               TO_CHAR(REGI_DT, 'YYYYMMDDHH24MISS') REGI_DT
+          FROM TB_THROW_MONEY
+         WHERE THROW_USER_ID = #{userId}
+           AND ROOM_ID = #{roomId}
+           AND THROW_TOKEN = #{throwToken}
+           AND REGI_DT >= TRUNC(SYSDATE - 7)
+        ]]>
+    </select>
+
+    <select id="selectGetMoneyInfo" resultType="com.jigmini.common.util.CamelHashMap">
+        SELECT GET_AMT,
+               GET_USER_ID
+          FROM TB_GET_MONEY
+         WHERE THROW_ID = #{throwId}
+           AND GET_USER_ID IS NOT NULL
+    </select>
+
+    <insert id="insertThrowMoney" parameterType="java.util.HashMap">
+        INSERT INTO TB_THROW_MONEY
+        (
+        THROW_ID,
+        THROW_USER_ID,
+        ROOM_ID,
+        THROW_AMT,
+        REMAIN_AMT,
+        THROW_NUM,
+        THROW_TOKEN,
+        CNCL_YN,
+        REGI_DT,
+        REGMN_ID,
+        CHG_DT,
+        CHGMN_ID
+        )
+        VALUES
+        (
+        #{throwId},
+        #{userId},
+        #{roomId},
+        #{throwAmt},
+        #{throwAmt},
+        #{throwNum},
+        #{throwToken},
+        'N',
+        SYSDATE,
+        'SYSTEM',
+        SYSDATE,
+        'SYSTEM'
+        )
+    </insert>
+
+    <insert id="insertGetMoney" parameterType="java.util.HashMap">
+        INSERT INTO TB_GET_MONEY
+        (
+        THROW_ID,
+        GET_SEQ,
+        GET_AMT,
+        REGI_DT,
+        REGMN_ID,
+        CHG_DT,
+        CHGMN_ID
+        )
+        VALUES
+        (
+        #{throwId},
+        (SELECT NVL(MAX(GET_SEQ) + 1, 1) FROM TB_GET_MONEY WHERE THROW_ID = #{throwId}),
+        #{getAmt},
+        SYSDATE,
+        'SYSTEM',
+        SYSDATE,
+        'SYSTEM'
+        )
+    </insert>
+
+    <update id="updateThrowMoney" parameterType="java.util.HashMap">
+        UPDATE TB_THROW_MONEY
+           SET REMAIN_AMT = REMAIN_AMT - #{getAmt},
+               CHGMN_ID = 'SYSTEM',
+               CHG_DT = SYSDATE
+         WHERE THROW_ID = #{throwId}
+    </update>
+
+    <update id="updateGetMoney" parameterType="java.util.HashMap">
+        UPDATE TB_GET_MONEY
+           SET GET_USER_ID = #{userId},
+               GET_DT = SYSDATE,
+               CHGMN_ID = 'SYSTEM',
+               CHG_DT = SYSDATE
+         WHERE THROW_ID = #{throwId}
+           AND GET_SEQ = #{getSeq}
+    </update>
+
+    <update id="updateUserAccount" parameterType="java.util.HashMap">
+        UPDATE TB_USER_ACCOUNT
+           SET
+        <if test="depWitDivCode == '01'">
+            HOLD_AMT = HOLD_AMT + #{depAmt},
+        </if>
+        <if test="depWitDivCode == '02'">
+            HOLD_AMT = HOLD_AMT - #{witAmt},
+        </if>
+            CHGMN_ID = 'SYSTEM',
+            CHG_DT = SYSDATE
+         WHERE USER_ID = #{userId}
+    </update>
+</mapper>
