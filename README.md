@@ -12,22 +12,22 @@
 ## 2. 프로젝트 구성
 
 throw-money-around</br>
-         └src</br>
-		   └main</br>
-			  └java</br>
-			     └com</br>
-			  	   └jigmini</br>
-				       └common           - 공통</br>
-						   └exception    - 예외</br>
-                           └util         - 유틸</br>
-                       └throwmoneyaround</br>
-                           └dao          - DAO</br>
-                           └service      - Service</br>
-                               └impl</br>
-                           └web          - Controller</br>
-              └resources</br>
-                 └mapper                 - mapper(SQL)</br>
-                   └throwmoneyaround</br>
+.........└src</br>
+...........└main</br>
+..............└java</br>
+.................└com</br>
+...................└jigmini</br>
+.......................└common           - [공통]</br>
+...........................└exception    - [예외]</br>
+...........................└util         - [유틸]</br>
+.......................└throwmoneyaround</br>
+...........................└dao          - [DAO]</br>
+...........................└service      - [Service]</br>
+...............................└impl</br>
+...........................└web          - [Controller]</br>
+..............└resources</br>
+.................└mapper                 - [mapper(SQL)]</br>
+...................└throwmoneyaround</br>
 
 ## 3. 테이블 설명(주요 컬럼 설명)
 (oracle_object_create.sql)
