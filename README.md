@@ -11,60 +11,60 @@
  
 ## 2. 프로젝트 구성
 
-throw-money-around
-         └src
-		   └main
-			  └java
-			     └com
-			  	   └jigmini
-				       └common           - 공통
-						   └exception    - 예외
-                           └util         - 유틸
-                       └throwmoneyaround
-                           └dao          - DAO
-                           └service      - Service
-                               └impl     
-                           └web          - Controller
-              └resources
-                 └mapper                 - mapper(SQL)
-                   └throwmoneyaround
+throw-money-around</br>
+         └src</br>
+		   └main</br>
+			  └java</br>
+			     └com</br>
+			  	   └jigmini</br>
+				       └common           - 공통</br>
+						   └exception    - 예외</br>
+                           └util         - 유틸</br>
+                       └throwmoneyaround</br>
+                           └dao          - DAO</br>
+                           └service      - Service</br>
+                               └impl</br>
+                           └web          - Controller</br>
+              └resources</br>
+                 └mapper                 - mapper(SQL)</br>
+                   └throwmoneyaround</br>
 
 ## 3. 테이블 설명(주요 컬럼 설명)
 (oracle_object_create.sql)
 
  - 사용자(TB_USER) : 사용자
-    > USER_ID       NUMBER(10)   사용자ID PK1
+    * USER_ID       NUMBER(10)   사용자ID PK1
 	
  - 대화방(TB_CHATROOM) : 대화방
-    > ROOM_ID       VARCHAR2(10) 방ID   PK1
-	> JOIN_CNT      NUMBER(10)   참여수
+    + ROOM_ID       VARCHAR2(10) 방ID   PK1
+	+ JOIN_CNT      NUMBER(10)   참여수
 	
  - 대화방사용자(TB_CHATROOM_USER) : 대화방에 참여하고 있는 사용자
-    > ROOM_ID       VARCHAR2(10) 방ID   PK1
-	> USER_ID       NUMBER(10)   사용자ID PK2
+    + ROOM_ID       VARCHAR2(10) 방ID   PK1
+	+ USER_ID       NUMBER(10)   사용자ID PK2
 	
  - 사용자계좌(TB_USER_ACCOUNT) : 사용자의 계좌
-    > USER_ID       NUMBER(10)   사용자ID PK1
-	> BANK_CODE     VARCHAR2(2)  은행코드
-	> ACCOUNT_NO    VARCHAR2(20) 계좌번호
+    + USER_ID       NUMBER(10)   사용자ID PK1
+	+ BANK_CODE     VARCHAR2(2)  은행코드
+	+ ACCOUNT_NO    VARCHAR2(20) 계좌번호
 	
  - 돈뿌리기(TB_THROW_MONEY) : 돈뿌리기 정보
-    > THROW_ID      NUMBER(10)   뿌리기ID PK1
-	> THROW_USER_ID NUMBER(10)   뿌리기사용자ID
-	> ROOM_ID       VARCHAR2(10) 방ID
-	> THROW_AMT     NUMBER(20)   뿌리기금액
-	> REMAIN_AMT    NUMBER(20)   남은금액
-	> THROW_NUM     NUMBER(10)   뿌리기수(분배수)
-	> THROW_TOKEN   VARCHAR2(3)  뿌리기토큰
-	> CNCL_YN       VARCHAR2(1)  취소여부
-	> REGI_DT       DATE         등록일시(뿌리기일시)
+    + THROW_ID      NUMBER(10)   뿌리기ID PK1
+	+ THROW_USER_ID NUMBER(10)   뿌리기사용자ID
+	+ ROOM_ID       VARCHAR2(10) 방ID
+	+ THROW_AMT     NUMBER(20)   뿌리기금액
+	+ REMAIN_AMT    NUMBER(20)   남은금액
+	+ THROW_NUM     NUMBER(10)   뿌리기수(분배수)
+	+ THROW_TOKEN   VARCHAR2(3)  뿌리기토큰
+	+ CNCL_YN       VARCHAR2(1)  취소여부
+	+ REGI_DT       DATE         등록일시(뿌리기일시)
 	
  - 돈받기(TB_GET_MONEY) : 돈뿌리기에 대한 분배 및 받기 정보
-    > THROW_ID      NUMBER(10)   뿌리기ID PK1
-	> GET_SEQ       NUMBER(10)   받기순번  PK2
-	> GET_USER_ID   NUMBER(10)   받기사용자ID
-	> GET_DT        DATE         받기일시
-	> GET_AMT       NUMBER(20)   받기금액
+    + THROW_ID      NUMBER(10)   뿌리기ID PK1
+	+ GET_SEQ       NUMBER(10)   받기순번  PK2
+	+ GET_USER_ID   NUMBER(10)   받기사용자ID
+	+ GET_DT        DATE         받기일시
+	+ GET_AMT       NUMBER(20)   받기금액
 	
 ## 4. API 설명
 
@@ -88,7 +88,7 @@ com/jigmini/common/exception/BizException.java
 
 com/jigmini/common/util/CamelHashMap.java
  - Under Score에서 Camel Case로 변환해주는 Map
-    > Mybatis가 resultMap에 대해서 Camel Case mapping을 지원하지 않아 만듬
+    + Mybatis가 resultMap에 대해서 Camel Case mapping을 지원하지 않아 만듬
 
 com/jigmini/common/util/Util.java
  - 유틸
@@ -111,4 +111,4 @@ mapper/throwmoneyaround/ThrowMoneyAroundSQL.xml
 
 application.properties
  - Spring Boot Application 참조하는 프로퍼티
-    > tomcat port, logging, DB connection config, mybatis config 설정함
+    + tomcat port, logging, DB connection config, mybatis config 설정함
