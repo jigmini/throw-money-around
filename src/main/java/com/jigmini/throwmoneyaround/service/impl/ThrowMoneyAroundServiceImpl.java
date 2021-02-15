@@ -118,7 +118,7 @@ public class ThrowMoneyAroundServiceImpl implements ThrowMoneyAroundService {
         CamelHashMap<String, String> throwMoneyInfo = throwMoneyAroundDAO.selectThrowMoneyInfo(paramMap);
 
         if (throwMoneyInfo == null || throwMoneyInfo.size() < 1) {
-            throw new BizException("-97,다음의 에러 중 하나: 대화방 또는 뿌린사람이 없음 / 뿌린 기간이 7일 경과 / 토큰값 불일치");
+            throw new BizException("-97,다음의 에러 중 하나: 뿌린 사람이 아님 / 대화방 또는 뿌린사람이 없음 / 뿌린 기간이 7일 경과 / 토큰값 불일치");
         } else {
             logger.debug(throwMoneyInfo.toString());
         }
